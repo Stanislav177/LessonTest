@@ -8,17 +8,43 @@ internal class DetailsPresenter internal constructor(
     private var count: Int = 0,
 ) : PresenterDetailsContract {
 
+    private var stateView: Boolean = false
+
     override fun setCounter(count: Int) {
         this.count = count
     }
 
     override fun onIncrement() {
-        count++
-        viewContract.setCount(count)
+        when (stateView) {
+            true -> {
+                count++
+                viewContract.setCount(count)
+            }
+            false -> {
+                count++
+            }
+        }
     }
 
     override fun onDecrement() {
-        count--
-        viewContract.setCount(count)
+
+        when (stateView) {
+            true -> {
+                count--
+                viewContract.setCount(count)
+            }
+            false -> {
+                count--
+            }
+        }
+
+    }
+
+    override fun onAttach(stateViewActivity: Boolean) {
+        stateView = stateViewActivity
+    }
+
+    override fun onDetach(stateViewActivity: Boolean) {
+        stateView = stateViewActivity
     }
 }

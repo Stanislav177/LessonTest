@@ -19,32 +19,46 @@ internal class SearchPresenter internal constructor(
     private val repository: GitHubRepository,
 ) : PresenterSearchContract, GitHubRepository.GitHubRepositoryCallback {
 
+    private var stateView: Boolean = false
+
     override fun searchGitHub(searchQuery: String) {
         viewContract.displayLoading(true)
         repository.searchGithub(searchQuery, this)
     }
 
+    override fun onAttach(stateViewActivity: Boolean) {
+        stateView = stateViewActivity
+    }
+
+    override fun onDetach(stateViewActivity: Boolean) {
+        stateView = stateViewActivity
+    }
+
     override fun handleGitHubResponse(response: Response<SearchResponse?>?) {
         viewContract.displayLoading(false)
-        if (response != null && response.isSuccessful) {
-            val searchResponse = response.body()
-            val searchResults = searchResponse?.searchResults
-            val totalCount = searchResponse?.totalCount
-            if (searchResults != null && totalCount != null) {
-                viewContract.displaySearchResults(
-                    searchResults,
-                    totalCount
-                )
+        if (stateView) {
+            if (response != null && response.isSuccessful) {
+                val searchResponse = response.body()
+                val searchResults = searchResponse?.searchResults
+                val totalCount = searchResponse?.totalCount
+                if (searchResults != null && totalCount != null) {
+                    viewContract.displaySearchResults(
+                        searchResults,
+                        totalCount
+                    )
+                } else {
+                    viewContract.displayError("Search results or total count are null")
+                }
             } else {
-                viewContract.displayError("Search results or total count are null")
+                viewContract.displayError("Response is null or unsuccessful")
             }
-        } else {
-            viewContract.displayError("Response is null or unsuccessful")
         }
     }
 
     override fun handleGitHubError() {
-        viewContract.displayLoading(false)
-        viewContract.displayError()
+        if (stateView) {
+            viewContract.displayLoading(false)
+            viewContract.displayError()
+        }
     }
 }
