@@ -5,20 +5,43 @@ import com.example.lessontest.view.details.ViewDetailsContract
 
 internal class DetailsPresenter internal constructor(
     private val viewContract: ViewDetailsContract,
-    private var count: Int = 0,
+    private var countClazz: Int = 0,
+    var stateView: Boolean = false
 ) : PresenterDetailsContract {
 
     override fun setCounter(count: Int) {
-        this.count = count
+        this.countClazz = count
     }
 
     override fun onIncrement() {
-        count++
-        viewContract.setCount(count)
+        when (stateView) {
+            true -> {
+                countClazz++
+                viewContract.setCount(countClazz)
+            }
+            false -> {
+                countClazz++
+            }
+        }
     }
 
     override fun onDecrement() {
-        count--
-        viewContract.setCount(count)
+        when (stateView) {
+            true -> {
+                countClazz--
+                viewContract.setCount(countClazz)
+            }
+            false -> {
+                countClazz--
+            }
+        }
+    }
+
+    override fun onAttach() {
+        this.stateView = true
+    }
+
+    override fun onDetach(){
+        this.stateView = false
     }
 }

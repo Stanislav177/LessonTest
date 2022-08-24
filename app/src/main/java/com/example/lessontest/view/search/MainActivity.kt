@@ -42,6 +42,16 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         recyclerView.adapter = adapter
     }
 
+    override fun onResume() {
+        super.onResume()
+        presenter.onAttach()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        presenter.onDetach()
+    }
+
     private fun setQueryListener() {
         searchEditText.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
