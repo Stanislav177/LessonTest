@@ -44,12 +44,12 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
 
     override fun onResume() {
         super.onResume()
-        presenter.onAttach(true)
+        presenter.onAttach()
     }
 
     override fun onPause() {
         super.onPause()
-        presenter.onDetach(false)
+        presenter.onDetach()
     }
 
     private fun setQueryListener() {

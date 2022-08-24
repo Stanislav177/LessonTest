@@ -23,12 +23,12 @@ class DetailsActivity : AppCompatActivity(), ViewDetailsContract {
 
     override fun onStart() {
         super.onStart()
-        presenter.onAttach(true)
+        presenter.onAttach()
     }
 
     override fun onPause() {
         super.onPause()
-        presenter.onDetach(false)
+        presenter.onDetach()
     }
 
     private fun setUI() {

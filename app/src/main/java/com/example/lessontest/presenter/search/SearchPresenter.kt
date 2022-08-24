@@ -19,19 +19,19 @@ internal class SearchPresenter internal constructor(
     private val repository: GitHubRepository,
 ) : PresenterSearchContract, GitHubRepository.GitHubRepositoryCallback {
 
-    private var stateView: Boolean = false
+    var stateView: Boolean = false
 
     override fun searchGitHub(searchQuery: String) {
         viewContract.displayLoading(true)
         repository.searchGithub(searchQuery, this)
     }
 
-    override fun onAttach(stateViewActivity: Boolean) {
-        stateView = stateViewActivity
+    override fun onAttach() {
+        this.stateView = true
     }
 
-    override fun onDetach(stateViewActivity: Boolean) {
-        stateView = stateViewActivity
+    override fun onDetach() {
+       this.stateView = false
     }
 
     override fun handleGitHubResponse(response: Response<SearchResponse?>?) {
