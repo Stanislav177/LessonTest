@@ -16,6 +16,7 @@ import com.example.lessontest.view.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
@@ -35,6 +36,7 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         }
         setQueryListener()
         setRecyclerView()
+        setTotalCount(totalCount)
     }
 
     private fun setRecyclerView() {
@@ -88,7 +90,13 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         totalCount: Int,
     ) {
         this.totalCount = totalCount
+        setTotalCount(totalCount)
         adapter.updateResults(searchResults)
+    }
+
+    private fun setTotalCount(totalCount: Int) {
+        totalCountTextView.text =
+            String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
     }
 
     override fun displayError() {
