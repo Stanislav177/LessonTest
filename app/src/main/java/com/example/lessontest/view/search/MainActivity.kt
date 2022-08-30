@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
+import android.widget.TextView.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lessontest.R
@@ -16,6 +17,7 @@ import com.example.lessontest.view.details.DetailsActivity
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.*
 
 class MainActivity : AppCompatActivity(), ViewSearchContract {
 
@@ -35,6 +37,8 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         }
         setQueryListener()
         setRecyclerView()
+        setQueryBtnClickSearchListener()
+        //setTotalCount(totalCount)
     }
 
     private fun setRecyclerView() {
@@ -72,6 +76,18 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         })
     }
 
+    private fun setQueryBtnClickSearchListener() {
+        btnSearch.setOnClickListener {
+            val query = searchEditText.text.toString()
+            if (query.isNotBlank()) {
+                presenter.searchGitHub(query)
+            } else {
+                Toast.makeText(this, getString(R.string.enter_search_word), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
     private fun createRepository(): GitHubRepository {
         return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
     }
@@ -87,8 +103,16 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int,
     ) {
+        setTotalCount(totalCount)
         this.totalCount = totalCount
         adapter.updateResults(searchResults)
+    }
+
+    private fun setTotalCount(totalCount: Int) {
+        with(totalCountTextView) {
+            visibility = VISIBLE
+            text = String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
+        }
     }
 
     override fun displayError() {
