@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView.OnEditorActionListener
+import android.widget.TextView.VISIBLE
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.lessontest.R
@@ -36,7 +37,8 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         }
         setQueryListener()
         setRecyclerView()
-        setTotalCount(totalCount)
+        setQueryBtnClickSearchListener()
+        //setTotalCount(totalCount)
     }
 
     private fun setRecyclerView() {
@@ -74,6 +76,18 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         })
     }
 
+    private fun setQueryBtnClickSearchListener() {
+        btnSearch.setOnClickListener {
+            val query = searchEditText.text.toString()
+            if (query.isNotBlank()) {
+                presenter.searchGitHub(query)
+            } else {
+                Toast.makeText(this, getString(R.string.enter_search_word), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
+
     private fun createRepository(): GitHubRepository {
         return GitHubRepository(createRetrofit().create(GitHubApi::class.java))
     }
@@ -89,14 +103,16 @@ class MainActivity : AppCompatActivity(), ViewSearchContract {
         searchResults: List<SearchResult>,
         totalCount: Int,
     ) {
-        this.totalCount = totalCount
         setTotalCount(totalCount)
+        this.totalCount = totalCount
         adapter.updateResults(searchResults)
     }
 
     private fun setTotalCount(totalCount: Int) {
-        totalCountTextView.text =
-            String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
+        with(totalCountTextView) {
+            visibility = VISIBLE
+            text = String.format(Locale.getDefault(), getString(R.string.results_count), totalCount)
+        }
     }
 
     override fun displayError() {
