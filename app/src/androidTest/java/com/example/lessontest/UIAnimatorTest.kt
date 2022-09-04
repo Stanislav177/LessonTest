@@ -67,13 +67,30 @@ class UIAnimatorTest {
         val btnDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
         btnDetails.click()
         val btnIncrem =
-            uiDevice.wait(Until.findObject(By.res(packageName, "incrementButton")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "incrementButton")), TIME_5000L)
         btnIncrem.click()
 
         val textView =
-            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")),
+                TIME_5000L)
 
-        assertEquals(textView.text.toString(), "Number of results: 1")
+        assertEquals(textView.text.toString(), NUMBER_OF_RESULTS_PLUS_1)
+    }
+
+    @Test
+    fun activity_main_to_click_details_decrem() {
+        val btnDetails = uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
+        btnDetails.click()
+
+        val btnDecrem = uiDevice.wait(Until.findObject(By.res(packageName, "decrementButton")),
+            TIME_5000L)
+        btnDecrem.click()
+
+        val textView = uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")),
+            TIME_5000L)
+
+        assertEquals(textView.text.toString(), NUMBER_OF_RESULTS_MINUS_1)
+
     }
 
     @Test
@@ -84,7 +101,7 @@ class UIAnimatorTest {
             .perform(ViewActions.pressImeActionButton())
 
         val chaText =
-            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextView")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextView")), TIME_5000L)
 
         val btnDetails =
             uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
@@ -94,7 +111,8 @@ class UIAnimatorTest {
         }
 
         val textView =
-            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")),
+                TIME_5000L)
 
         assertEquals(textView.text.toString(), "Number of results: 5")
     }
@@ -107,7 +125,7 @@ class UIAnimatorTest {
         btnSearch.click()
 
         val chaText =
-            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextView")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextView")), TIME_5000L)
 
         val btnDetails =
             uiDevice.findObject(By.res(packageName, "toDetailsActivityButton"))
@@ -117,7 +135,8 @@ class UIAnimatorTest {
         }
 
         val textView =
-            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")), 5000L)
+            uiDevice.wait(Until.findObject(By.res(packageName, "totalCountTextViewDet")),
+                TIME_5000L)
 
         assertEquals(textView.text.toString(), "Number of results: 5")
     }
